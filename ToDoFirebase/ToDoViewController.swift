@@ -33,9 +33,6 @@ class ToDoViewController: UIViewController, UITableViewDelegate, UITableViewData
         todoTV.dataSource = self
         todoTV.rowHeight = 80
         
-//        if let uid = userID{
-//            welcomeLabel.text = uid
-//        }
         
         loadTodos()
         setWelcomeLabel()
@@ -62,10 +59,11 @@ class ToDoViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     @IBAction func addTodo(_ sender: Any) {
         
-        let todoAlert = UIAlertController(title: "New Todo", message: "Add a todo", preferredStyle: .alert)
+        let todoAlert = UIAlertController(title: "New Todo", message: "Please add a todo", preferredStyle: .alert)
         todoAlert.addTextField()
         let addTodoAction = UIAlertAction(title: "Add", style: .default) { (action) in
             let todoText = todoAlert.textFields![0].text
+    
             self.todos.append(Todo(isChecked: false, todoName: todoText!))
             
             let ref = Database.database().reference(withPath: "Users").child(self.userID!).child("todos")
