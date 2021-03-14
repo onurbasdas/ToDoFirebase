@@ -33,11 +33,51 @@ class ToDoViewController: UIViewController, UITableViewDelegate, UITableViewData
         todoTV.dataSource = self
         todoTV.rowHeight = 80
         
-        if let uid = userID{
-            welcomeLabel.text = uid
-        }
+//        if let uid = userID{
+//            welcomeLabel.text = uid
+//        }
         
         loadTodos()
+        setWelcomeLabel()
+        
+    }
+    
+    
+    func setWelcomeLabel()  {
+        let userRef = Database.database().reference(withPath: "Users").child(userID!)
+        userRef.observeSingleEvent(of: .value) { (snapshot) in
+            let value = snapshot.value as? NSDictionary
+            let email = value!["email"] as? String
+            self.welcomeLabel.text = "Hello " + email! + "!"
+        }
+    }
+    
+    
+    @IBAction func logoutClicked(_ sender: Any) {
+        try! Auth.auth().signOut()
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    
+    
+    @IBAction func addTodo(_ sender: Any) {
+        
+        let todoAlert = UIAlertController(title: "New Todo", message: "Add a todo", preferredStyle: .alert)
+        todoAlert.addTextField()
+        let addTodoAction = UIAlertAction(title: "Add", style: .default) { (action) in
+            let todoText = todoAlert.textFields![0].text
+            self.todos.append(Todo(isChecked: false, todoName: todoText!))
+            
+            let ref = Database.database().reference(withPath: "Users").child(self.userID!).child("todos")
+            ref.child(todoText!).setValue(["isChecked" : false])
+            
+            self.todoTV.reloadData()
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default)
+        todoAlert.addAction(addTodoAction)
+        todoAlert.addAction(cancelAction)
+        
+        present(todoAlert, animated: true, completion: nil)
         
     }
     
@@ -91,6 +131,7 @@ class ToDoViewController: UIViewController, UITableViewDelegate, UITableViewData
             todos[indexPath.row].isChecked = true
             ref.updateChildValues(["isChecked" : true])
         }
+        todoTV.reloadData()
     }
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {

@@ -164,9 +164,15 @@
                     <navigationItem key="navigationItem" id="tXO-6p-8cg">
                         <barButtonItem key="leftBarButtonItem" title="Logout" id="fy4-KS-SUu">
                             <color key="tintColor" systemColor="systemRedColor"/>
+                            <connections>
+                                <action selector="logoutClicked:" destination="D9o-qV-AZG" id="2DO-bN-6to"/>
+                            </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="ben-3a-ZTQ">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="addTodo:" destination="D9o-qV-AZG" id="kue-3Q-qZc"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
